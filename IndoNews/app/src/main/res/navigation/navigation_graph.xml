@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/splashFrag">
+
+    <fragment
+        android:id="@+id/splashFrag"
+        android:name="com.indo.news.modules.splash.SplashFrag"
+        android:label="SplashFrag">
+        <action
+            android:id="@+id/action_splashFrag_to_homeFrag"
+            app:destination="@id/homeFrag"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popUpTo="@id/splashFrag"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFrag"
+        android:name="com.indo.news.modules.home.view.HomeFrag"
+        android:label="frag_home"
+        tools:layout="@layout/frag_home">
+        <action
+            android:id="@+id/action_homeFrag_to_detailFrag2"
+            app:destination="@id/detailFrag"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFrag"
+        android:name="com.indo.news.modules.detail.view.DetailFrag"
+        android:label="frag_detail"
+        tools:layout="@layout/frag_detail">
+        <argument
+            android:name="news"
+            app:argType="com.indo.news.data.model.Article" />
+        <action
+            android:id="@+id/action_detailFrag_self"
+            app:destination="@id/detailFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFrag"
+        android:name="com.indo.news.modules.favorite.view.FavoriteFrag"
+        android:label="frag_favorite"
+        tools:layout="@layout/frag_favorite" >
+        <action
+            android:id="@+id/action_favoriteFrag_to_detailFrag"
+            app:destination="@id/detailFrag" />
+    </fragment>
+</navigation>

@@ -1,0 +1,143 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'androidx.navigation.safeargs'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+def apiKeyPropertiesFile = rootProject.file("apikey.properties")
+def apiKeyProperties = new Properties()
+apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.indo.news"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 3
+        versionName "1.0.2"
+        multiDexEnabled true
+
+        buildConfigField("String", "BASE_URL", "\"https://newsapi.org/v2/\"")
+        buildConfigField("String", "API_KEY", apiKeyProperties['API_KEY'])
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildFeatures{
+        dataBinding = true
+        viewBinding = true
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+        }
+
+        release {
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine"
+
+    implementation "com.google.android.play:core:1.9.0"
+
+    // Android
+    implementation "androidx.core:core-ktx:$ktx"
+    implementation "androidx.appcompat:appcompat:$appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-rc01"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-rc01"
+
+    // Material Design
+    implementation "com.google.android.material:material:$material"
+
+    // Viewpager
+    implementation "androidx.viewpager2:viewpager2:$viewPager"
+
+    // Room
+    implementation "androidx.room:room-runtime:$room"
+    implementation "androidx.room:room-ktx:$room"
+    kapt "androidx.room:room-compiler:$room"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:$paging"
+
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
+
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModel"
+    kapt "androidx.hilt:hilt-compiler:$hiltViewModel"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-ads:$firebaseAds"
+    implementation "com.google.firebase:firebase-crashlytics:$crashlytics"
+    implementation "com.google.firebase:firebase-analytics-ktx:$firebaseAnalytics"
+
+    // sdp & ssp
+    implementation "com.intuit.ssp:ssp-android:$sdpssp"
+    implementation "com.intuit.sdp:sdp-android:$sdpssp"
+
+    // Utils
+    implementation "com.airbnb.android:lottie:$lottie"
+    implementation "com.jakewharton.timber:timber:$timber"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // Testing
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}
